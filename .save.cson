@@ -1,0 +1,2 @@
+"**/*.tsx": "tsfmt -r ${path}"
+"**/*.ts": "tsfmt -r ${path}"
