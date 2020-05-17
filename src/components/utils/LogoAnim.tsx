@@ -20,6 +20,7 @@ Snap.plugin(function (Snap, Element, Paper, global) {
 interface LogoAnimProps {
   classes?: any;
   loop?: any;
+  radius?: number;
 }
 
 class LogoAnim extends React.Component<LogoAnimProps, null> {
@@ -30,12 +31,14 @@ class LogoAnim extends React.Component<LogoAnimProps, null> {
   private cPath;
   private cPathLength;
   private svg;
+  private radius;
 
   constructor(props: LogoAnimProps) {
     super(props);
 
     this.isLogoRendered = false;
     this.isAnimRunning = false;
+    this.radius = props.radius ?? LogoStyle.radius;
   }
 
   componentDidMount() {
@@ -62,14 +65,21 @@ class LogoAnim extends React.Component<LogoAnimProps, null> {
 
   renderSvg() {
     return new Promise(resolve => {
-      const halfRadius = LogoStyle.radius / 2;
+      const halfRadius = this.radius / 2;
+      const stopPoint = (halfRadius * 0.4) + halfRadius;
       const c2radius = halfRadius - LogoStyle.stroke * 1.5;
 
       if (!this.isLogoRendered) {
         this.svg = Snap('#logo');
-        this.c1 = this.svg.circle(halfRadius, halfRadius, halfRadius - LogoStyle.stroke);
-        this.c2 = this.svg.circle(125, 125, c2radius);
-        this.cPath = this.svg.circlePath(halfRadius, halfRadius, halfRadius - LogoStyle.stroke)
+        this.c1 = this.svg.circle(
+          halfRadius, halfRadius, halfRadius - LogoStyle.stroke
+        );
+        this.c2 = this.svg.circle(
+          halfRadius, halfRadius, c2radius
+        );
+        this.cPath = this.svg.circlePath(
+          halfRadius, halfRadius, halfRadius - LogoStyle.stroke
+        )
           .attr({ fill: 'none', stroke: 'none' });
         this.cPathLength = this.cPath.getTotalLength();
 
@@ -81,8 +91,8 @@ class LogoAnim extends React.Component<LogoAnimProps, null> {
 
         this.c2.attr({
           fill: '#FF7600',
-          cx: 125,
-          cy: 125
+          cx: halfRadius,
+          cy: halfRadius
         });
 
         this.isLogoRendered = true;
@@ -104,9 +114,9 @@ class LogoAnim extends React.Component<LogoAnimProps, null> {
           });
         };
 
-        Snap.animate(this.cPathLength, 175, c2anim, 800, mina.easeout, () => {
-          Snap.animate(175, 0, c2anim, 650, mina.easein, () => {
-            Snap.animate(0, 175, c2anim, 1000, mina.bounce, () => {
+        Snap.animate(this.cPathLength, stopPoint, c2anim, 800, mina.easeout, () => {
+          Snap.animate(stopPoint, 0, c2anim, 650, mina.easein, () => {
+            Snap.animate(0, stopPoint, c2anim, 1000, mina.bounce, () => {
               this.c2.animate({
                 r: c2radius
               }, 500, mina.elastic, () => {
