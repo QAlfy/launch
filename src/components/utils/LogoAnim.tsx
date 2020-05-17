@@ -65,20 +65,21 @@ class LogoAnim extends React.Component<LogoAnimProps, null> {
 
   renderSvg() {
     return new Promise(resolve => {
+      const stroke = this.radius * 0.2;
       const halfRadius = this.radius / 2;
       const stopPoint = (halfRadius * 0.4) + halfRadius;
-      const c2radius = halfRadius - LogoStyle.stroke * 1.5;
+      const c2radius = halfRadius - stroke * 1.5;
 
       if (!this.isLogoRendered) {
         this.svg = Snap('#logo');
         this.c1 = this.svg.circle(
-          halfRadius, halfRadius, halfRadius - LogoStyle.stroke
+          halfRadius, halfRadius, halfRadius - stroke
         );
         this.c2 = this.svg.circle(
           halfRadius, halfRadius, c2radius
         );
         this.cPath = this.svg.circlePath(
-          halfRadius, halfRadius, halfRadius - LogoStyle.stroke
+          halfRadius, halfRadius, halfRadius - stroke
         )
           .attr({ fill: 'none', stroke: 'none' });
         this.cPathLength = this.cPath.getTotalLength();
@@ -86,7 +87,7 @@ class LogoAnim extends React.Component<LogoAnimProps, null> {
         this.c1.attr({
           fill: '#bada5500',
           stroke: '#007B9C',
-          strokeWidth: LogoStyle.stroke
+          strokeWidth: stroke
         });
 
         this.c2.attr({
@@ -135,7 +136,12 @@ class LogoAnim extends React.Component<LogoAnimProps, null> {
     const { classes } = this.props;
 
     return (
-      <svg xmlns="http://www.w3.org/2000/svg" id="logo" className={classes.logo}></svg>
+      <svg xmlns="http://www.w3.org/2000/svg"
+        id="logo" style={{
+          width: `${this.radius}px`,
+          height: `${this.radius}px`
+        }}
+      ></svg>
     );
   }
 }
