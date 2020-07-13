@@ -77,7 +77,7 @@ class LaunchPage extends React.Component<LaunchProps, LaunchState> {
       strings: strings.brand.legend,
       speed: 50,
       waitUntilVisible: true,
-      cursor: false
+      cursor: true
     }).go();
   }
 
